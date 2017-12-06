@@ -1,0 +1,4 @@
+{
+    "frontalFace": "haarcascade_frontalface_default.xml",
+    "smile" : "haarcascade_smile.xml"
+}
