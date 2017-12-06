@@ -1,0 +1,7 @@
+{
+    "faceKey" : "c9bed3984c3044058381433e9a40f02f",
+    "faceEndpoint" : "https://westus.api.cognitive.microsoft.com/face/v1.0/detect",
+    "findSimilarEndpoint" : "https://westus.api.cognitive.microsoft.com/face/v1.0/findsimilars",
+    "emotionKey" : "6f39aed58c4a446aa5cb811d1193c52d",
+    "emotionEndpoint":"https://westus.api.cognitive.microsoft.com/emotion/v1.0/recognize"
+}
