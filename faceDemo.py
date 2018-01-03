@@ -2,9 +2,9 @@ import imp, json,cv2,os
 import sys, threading, time
 from multiprocessing import Queue
 
-weightsPath =  "/home/pixiepro/Desktop/ftf-iot-demo/faceDetector/weights.txt"
-capturePath = "/home/pixiepro/Desktop/ftf-iot-demo/faceDetector/img.jpg"
-azureKeys = "/home/pixiepro/Desktop/keys/azureKeys.txt"
+weightsPath =  "/home/pixiepro/Demos/FTF/faceDetector/weights.txt"
+capturePath = "/home/pixiepro/Demos/FTF/faceDetector/img.jpg"
+azureKeys = "/home/pixiepro/Demos/FTF/keys/azureKeys.txt"
 
 fd = imp.load_source('FaceDetector','faceDetector/FaceDetector.py')
 am = imp.load_source('AzureCognitiveManager','azureCogServManager/AzureCognitiveManager.py')

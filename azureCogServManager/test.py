@@ -1,12 +1,12 @@
 import AzureCognitiveManager as az
 import json
 
-with open("/Users/robertohimmelbauer/Desktop/keys/azureKeys.txt","r") as f:
+with open("/home/pixiepro/Demos/FTF/keys/azureKeys.txt","r") as f:
 #with open("/Users/robertohimmelbauer/Desktop/keys/azureKeys.txt","r") as f:
     sub = json.load(f)
     f.close() 
 
-urlImage = "/Users/robertohimmelbauer/Desktop/ftf-iot-demo/faceDetector/img.jpg"
+urlImage = "/home/pixiepro/Demos/FTF/faceDetector/img.jpg"
 with open( urlImage, 'rb' ) as f:
     img = f.read()
 
