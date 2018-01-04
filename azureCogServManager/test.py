@@ -6,7 +6,7 @@ with open("/home/pixiepro/Demos/FTF/keys/azureKeys.txt","r") as f:
     sub = json.load(f)
     f.close() 
 
-urlImage = "/home/pixiepro/Demos/FTF/faceDetector/img.jpg"
+urlImage = "/home/pixiepro/Demos/FTF/faceDetector/img5.jpg"
 with open( urlImage, 'rb' ) as f:
     img = f.read()
 

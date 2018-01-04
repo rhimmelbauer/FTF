@@ -1,6 +1,7 @@
 import imp, json,cv2,os
 import sys, threading, time
 from multiprocessing import Queue
+from avatar.AvatarBuilder import AvatarBuilder
 
 weightsPath =  "/home/pixiepro/Demos/FTF/faceDetector/weights.txt"
 capturePath = "/home/pixiepro/Demos/FTF/faceDetector/img.jpg"
@@ -33,6 +34,26 @@ def pretty(d,indent=0):
         else:
             print ('\t' * (indent+1) + str(v))
 
+def showAvatar(dic, msg):
+
+    avatarBuilder = AvatarBuilder()
+
+    avatarBuilder.cycleDictionary(dic)
+    avatarBuilder.setImageToAvatar()
+
+    print(avatarBuilder.avatar.ImagePath)
+
+    displayImage(avatarBuilder.avatar.ImagePath, msg)
+    
+def displayImage(imagePath, msg):
+    avatar = cv2.imread(imagePath,cv2.IMREAD_COLOR)
+
+    cv2.namedWindow('Avatar', cv2.WINDOW_NORMAL)
+    cv2.resizeWindow('Avatar', 640, 480)
+    cv2.moveWindow('Avatar', 640, 0)
+    cv2.putText(avatar,msg,(10,280), cv2.FONT_HERSHEY_SIMPLEX, 4,(255,255,255),2,cv2.LINE_AA)
+    cv2.imshow('Avatar', avatar)
+    
 if __name__== "__main__":
 	faceDetector, azureCognitive, face = initObjects()
 
@@ -46,15 +67,17 @@ if __name__== "__main__":
 			face._faceAttr, tempFaceId = azureCognitive.getFaceAttr(capturePath)
 			if not face._faceAttr: pass
 			similar = azureCognitive.findSimilar(tempFaceId)
+			
+			face._faceId = tempFaceId
+			with open("azureCogServManager/faceids.txt","a") as f:
+                            f.write(face._faceId+'\n')
+                            f.close()
+                            
+			pretty(face._faceAttr)
 			if similar:
-				face._faceId= similar['faceId']
-				print("Hello again!")
+                            face._faceId= similar['faceId']
+                            showAvatar(face._faceAttr, "Hello Again!")
 			else:
-				face._faceId = tempFaceId
-				with open("azureCogServManager/faceids.txt","a") as f:
-					f.write(face._faceId+'\n')
-					f.close()
-				print("Hi, new person!")
-				pretty(face._faceAttr)
-		except:
-			print("ERR")
+                            showAvatar(face._faceAttr, "Hi, new person!")
+		except cv2.error as e:
+			print(e)
