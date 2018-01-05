@@ -63,7 +63,7 @@ class FaceDetector:
         def detectFace(self):
                 
                 if self.initCam == False:
-                        self.initCam = True
+                        self.initCam = False
                         self._cam = cv2.VideoCapture(0)
                 self._continue = True                
                 while self._continue is True:
@@ -88,6 +88,6 @@ class FaceDetector:
                         cv2.moveWindow('Video',0,0)
                         if cv2.waitKey(30) & 0xff == ord('q'):
                                 break
-##                self._cam.release()
+                self._cam.release()
                 if self._faceDetected:
                         cv2.imwrite(self._pathToImage,self._capture)

@@ -93,7 +93,7 @@ def azureThread(facetemp):
             showAvatar(facetemp._faceAttr, "Hi, new person!")
     time.sleep(3)
     print("//////////////////////Exit Thread///////////////////////")
-    lockAzureThread = False
+    
         
 if __name__== "__main__":
     faceDetector, azureCognitive, face = initObjects()
@@ -103,19 +103,24 @@ if __name__== "__main__":
         t = threading.Thread(target=faceDetector.detectFace)
         t.start()
         while not faceDetector._faceDetected: pass
-##        faceDetector.stop()
+        faceDetector.stop()
 		
         try:
             
             if os.path.isfile(capturePath):
+                print(str(lockAzureThread))
                 if not lockAzureThread:
                     print("//////////////////////Enter if///////////////////////")
                     lockAzureThread = True
                     t2 = threading.Thread(target=azureThread, args=[face])
                     t2.start()
+                    detectFaceTimes = 0
                     print("//////////////////////Exit if///////////////////////")
                 else:
+                    if detectFaceTimes == 5:
+                        lockAzureThread = False
                     print("//////////////////////Enter ELSE///////////////////////")
+                    detectFaceTimes = detectFaceTimes + 1
                         
         except cv2.error as e:
             print(e)
