@@ -79,9 +79,11 @@ class AzureCognitiveManager:
         response = self._makeRequest(req)
         print (response.status_code, response.reason)
         faces = json.loads(response.text)
-        print(str(faces))
+##        print(str(faces))
         if not faces:
             return None,None
+        if response.reason == "Bad Request":
+            return None, None
         face = max(faces,key=lambda item:item['faceRectangle']['width'])
         return face['faceAttributes'], face['faceId']
         
@@ -105,7 +107,7 @@ class AzureCognitiveManager:
         if response.reason == "Bad Request":
             return False
         similars = json.loads(response.text)
-        print("---------------- Print Similars " + str(similars) + "---------------------")
+##        print("---------------- Print Similars " + str(similars) + "---------------------")
         if similars:
             similar = max(similars,key=lambda item:item['confidence'])
         else:

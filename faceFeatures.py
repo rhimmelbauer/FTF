@@ -1,9 +1,9 @@
 import imp, json,cv2,os
 import sys, threading, time
 from multiprocessing import Queue
-from multiprocessing.dummy import Pool as ThreadPool
 from avatar.AvatarBuilder import AvatarBuilder
 from captureStats.DisplayInfo import DisplayInfo
+import time
 
 weightsPath =  "faceDetector/weights.txt"
 capturePath = "faceDetector/img.jpg"
@@ -11,6 +11,8 @@ azureKeys = "keys/azureKeys.txt"
 
 fd = imp.load_source('FaceDetector','faceDetector/FaceDetector.py')
 am = imp.load_source('AzureCognitiveManager','azureCogServManager/AzureCognitiveManager.py')
+
+lockAzureThread = False
 
 class Face():
     def _init__():
@@ -72,6 +74,26 @@ def displayImage(imagePath, msg):
     cv2.putText(avatar,msg,(10,280), cv2.FONT_HERSHEY_SCRIPT_SIMPLEX, 4,(255,255,255),2,cv2.LINE_AA)
     cv2.imshow('Avatar', avatar)
 
+
+def azureThread(facetemp):
+    print("//////////////////////Enter Thread///////////////////////")
+    facetemp._faceAttr, tempFaceId = azureCognitive.getFaceAttr(capturePath)
+    if face._faceAttr != None: 
+        similar = azureCognitive.findSimilar(tempFaceId)
+                    
+        facetemp._faceId = tempFaceId
+        with open("azureCogServManager/faceids.txt","a") as f:
+            f.write(facetemp._faceId+'\n')
+            f.close()
+                            
+        if similar:
+            facetemp._faceId= similar['faceId']
+            showAvatar(facetemp._faceAttr, "Hello Again!")
+        else:
+            showAvatar(facetemp._faceAttr, "Hi, new person!")
+    time.sleep(3)
+    print("//////////////////////Exit Thread///////////////////////")
+    lockAzureThread = False
         
 if __name__== "__main__":
     faceDetector, azureCognitive, face = initObjects()
@@ -81,29 +103,19 @@ if __name__== "__main__":
         t = threading.Thread(target=faceDetector.detectFace)
         t.start()
         while not faceDetector._faceDetected: pass
-        faceDetector.stop()
+##        faceDetector.stop()
 		
         try:
-            if detectFaceTimes >= 15:
-                if os.path.isfile(capturePath):
-                    face._faceAttr, tempFaceId = azureCognitive.getFaceAttr(capturePath)
-                    if face._faceAttr != None: 
-                        similar = azureCognitive.findSimilar(tempFaceId)
-                        
-                        face._faceId = tempFaceId
-                        with open("azureCogServManager/faceids.txt","a") as f:
-                            f.write(face._faceId+'\n')
-                            f.close()
-                                            
-                        if similar:
-                            face._faceId= similar['faceId']
-                            showAvatar(face._faceAttr, "Hello Again!")
-                        else:
-                            showAvatar(face._faceAttr, "Hi, new person!")
-                        detectFaceTimes = 0
+            
+            if os.path.isfile(capturePath):
+                if not lockAzureThread:
+                    print("//////////////////////Enter if///////////////////////")
+                    lockAzureThread = True
+                    t2 = threading.Thread(target=azureThread, args=[face])
+                    t2.start()
+                    print("//////////////////////Exit if///////////////////////")
                 else:
-                    detectFaceTimes = 5
-            else:
-                detectFaceTimes = detectFaceTimes + 1
+                    print("//////////////////////Enter ELSE///////////////////////")
+                        
         except cv2.error as e:
             print(e)
