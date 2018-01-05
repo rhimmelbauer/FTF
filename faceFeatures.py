@@ -117,7 +117,7 @@ if __name__== "__main__":
                     detectFaceTimes = 0
                     print("//////////////////////Exit if///////////////////////")
                 else:
-                    if detectFaceTimes == 5:
+                    if detectFaceTimes == 1:
                         lockAzureThread = False
                     print("//////////////////////Enter ELSE///////////////////////")
                     detectFaceTimes = detectFaceTimes + 1

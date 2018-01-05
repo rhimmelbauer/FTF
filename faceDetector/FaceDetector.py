@@ -86,7 +86,7 @@ class FaceDetector:
                                         self._capture = img                                                
                         cv2.imshow('Video',frame)
                         cv2.moveWindow('Video',0,0)
-                        if cv2.waitKey(30) & 0xff == ord('q'):
+                        if cv2.waitKey(1) & 0xff == ord('q'):
                                 break
                 self._cam.release()
                 if self._faceDetected:

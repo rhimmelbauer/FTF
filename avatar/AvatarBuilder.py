@@ -122,13 +122,13 @@ class AvatarBuilder(object):
         return highest
 
     def defineFacialHair(self):
-        if (self.avatar.FacialHair['moustache'] < 0.35) & (self.avatar.FacialHair['beard'] < 0.35):
+        if (self.avatar.FacialHair['moustache'] < 0.15) & (self.avatar.FacialHair['beard'] < 0.15):
             self.avatar.FacialHairValue = "None"
             return ''
-        elif (self.avatar.FacialHair['moustache'] > 0.5) & (self.avatar.FacialHair['beard'] < 0.45):
+        elif (self.avatar.FacialHair['moustache'] > 0.7) & (self.avatar.FacialHair['beard'] < 0.15):
             self.avatar.FacialHairValue = self.MOUSTACHE
             return self.MOUSTACHE
-        elif (self.avatar.FacialHair['moustache'] > 0.4) & (self.avatar.FacialHair['beard'] > 0.4):
+        elif (self.avatar.FacialHair['moustache'] > 0.2) & (self.avatar.FacialHair['beard'] > 0.2):
             self.avatar.FacialHairValue = self.BEARD
             return self.BEARD
         else:
