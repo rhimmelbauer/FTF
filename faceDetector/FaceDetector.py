@@ -14,6 +14,7 @@ class FaceDetector:
                 self.resetAttr()
                 self._cam = None
                 self._continue = False
+                self.initCam = False
 
         def __del__(self):
                 if self._cam:
@@ -59,8 +60,11 @@ class FaceDetector:
         def stop(self):
                 self._continue = False
         
-        def detectFace(self):                
-                self._cam = cv2.VideoCapture(0)
+        def detectFace(self):
+                
+                if self.initCam == False:
+                        self.initCam = True
+                        self._cam = cv2.VideoCapture(0)
                 self._continue = True                
                 while self._continue is True:
                         ret, frame = self._cam.read()
@@ -84,6 +88,6 @@ class FaceDetector:
                         cv2.moveWindow('Video',0,0)
                         if cv2.waitKey(1) & 0xff == ord('q'):
                                 break
-                self._cam.release()
+##                self._cam.release()
                 if self._faceDetected:
                         cv2.imwrite(self._pathToImage,self._capture)

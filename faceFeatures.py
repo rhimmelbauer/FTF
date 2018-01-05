@@ -1,12 +1,13 @@
 import imp, json,cv2,os
 import sys, threading, time
 from multiprocessing import Queue
+from multiprocessing.dummy import Pool as ThreadPool
 from avatar.AvatarBuilder import AvatarBuilder
 from captureStats.DisplayInfo import DisplayInfo
 
-weightsPath =  "/home/pixiepro/Demos/FTF/faceDetector/weights.txt"
-capturePath = "/home/pixiepro/Demos/FTF/faceDetector/img.jpg"
-azureKeys = "/home/pixiepro/Demos/FTF/keys/azureKeys.txt"
+weightsPath =  "faceDetector/weights.txt"
+capturePath = "faceDetector/img.jpg"
+azureKeys = "keys/azureKeys.txt"
 
 fd = imp.load_source('FaceDetector','faceDetector/FaceDetector.py')
 am = imp.load_source('AzureCognitiveManager','azureCogServManager/AzureCognitiveManager.py')
@@ -16,6 +17,7 @@ class Face():
         self._faceAttr = None
         self._emotion = None
         self._faceId = ""
+        self.GetAzureData = False
 
 def initObjects():
     faceDetector = fd.FaceDetector(weightsPath, capturePath)
@@ -41,8 +43,6 @@ def showAvatar(dic, msg):
 
     avatarBuilder.cycleDictionary(dic)
     avatarBuilder.setImageToAvatar()
-
-    print(avatarBuilder.avatar.ImagePath)
 
     displayImage(avatarBuilder.avatar.ImagePath, msg)
 
@@ -71,31 +71,39 @@ def displayImage(imagePath, msg):
     cv2.moveWindow('Avatar', 640, 0)
     cv2.putText(avatar,msg,(10,280), cv2.FONT_HERSHEY_SCRIPT_SIMPLEX, 4,(255,255,255),2,cv2.LINE_AA)
     cv2.imshow('Avatar', avatar)
-    
-if __name__== "__main__":
-	faceDetector, azureCognitive, face = initObjects()
 
-	while True:	
-		faceDetector.resetAttr()
-		t = threading.Thread(target=faceDetector.detectFace)
-		t.start()
-		while not faceDetector._faceDetected: pass
-		faceDetector.stop()
-		try:
-			face._faceAttr, tempFaceId = azureCognitive.getFaceAttr(capturePath)
-			if not face._faceAttr: pass
-			similar = azureCognitive.findSimilar(tempFaceId)
-			
-			face._faceId = tempFaceId
-			with open("azureCogServManager/faceids.txt","a") as f:
+        
+if __name__== "__main__":
+    faceDetector, azureCognitive, face = initObjects()
+    detectFaceTimes = 0
+    while True:
+        faceDetector.resetAttr()
+        t = threading.Thread(target=faceDetector.detectFace)
+        t.start()
+        while not faceDetector._faceDetected: pass
+        faceDetector.stop()
+		
+        try:
+            if detectFaceTimes >= 15:
+                if os.path.isfile(capturePath):
+                    face._faceAttr, tempFaceId = azureCognitive.getFaceAttr(capturePath)
+                    if face._faceAttr != None: 
+                        similar = azureCognitive.findSimilar(tempFaceId)
+                        
+                        face._faceId = tempFaceId
+                        with open("azureCogServManager/faceids.txt","a") as f:
                             f.write(face._faceId+'\n')
                             f.close()
-                            
-			pretty(face._faceAttr)
-			if similar:
+                                            
+                        if similar:
                             face._faceId= similar['faceId']
                             showAvatar(face._faceAttr, "Hello Again!")
-			else:
+                        else:
                             showAvatar(face._faceAttr, "Hi, new person!")
-		except cv2.error as e:
-			print(e)
+                        detectFaceTimes = 0
+                else:
+                    detectFaceTimes = 5
+            else:
+                detectFaceTimes = detectFaceTimes + 1
+        except cv2.error as e:
+            print(e)

@@ -20,8 +20,6 @@ class DisplayInfo(object):
 
     def writeLine(self, msg):
         y = (self.LineNumber * 26) + self.OFFSET
-        print(msg)
-        print(str(y))
         x = 10
         cv2.putText(self.image, msg, (x, (y*self.MULTIPLIER)), cv2.FONT_HERSHEY_SIMPLEX, 3, (255,255,255), 2)
         self.LineNumber = self.LineNumber + 1

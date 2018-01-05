@@ -106,7 +106,6 @@ class AvatarBuilder(object):
             self.avatar.HairColorValue = "No Hair"
             return self.BALD
         hairColorDictionary = {}
-        print(str(len(self.avatar.HairColor)))
         for item in self.avatar.HairColor:
             if str(item['color']) == self.BLOND_VALIDATION:
                 hairColorDictionary[self.BLOND] = item['confidence']
@@ -116,14 +115,13 @@ class AvatarBuilder(object):
                 hairColorDictionary[self.DARK] = item['confidence']
             elif str(item['color']) == self.RED_VALIDATION:
                 hairColorDictionary[self.RED] = item['confidence']
-        print(str(hairColorDictionary))
+        
         highest = max(hairColorDictionary, key=lambda key: hairColorDictionary[key])
-        print(str(highest))
+        
         self.avatar.HairColorValue = highest
         return highest
 
     def defineFacialHair(self):
-        print(str(self.avatar.FacialHair))
         if (self.avatar.FacialHair['moustache'] < 0.35) & (self.avatar.FacialHair['beard'] < 0.35):
             self.avatar.FacialHairValue = "None"
             return ''
@@ -138,10 +136,6 @@ class AvatarBuilder(object):
             return ''
         
     def setImageToAvatar(self):
-        print(self.defineHairColor())
-        print(self.defineGender())
-        print(self.defineEmotion())
-        print(self.defineGlasses())
         self.avatar.setImagePath(self.IMAGE_BASE
                                  + self.defineGender()
                                  + self.defineHairColor()
