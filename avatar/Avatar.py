@@ -7,6 +7,17 @@ class Avatar(object):
     HairColor = ''
     FacialHair = ''
     ImagePath = ''
+    HairColorValue = ''
+    FacialHairValue = ''
+    BaldValue = ''
+    Anger = ''
+    Contempt = ''
+    Disgust = ''
+    Fear = ''
+    Happiness = ''
+    Neutral = ''
+    Sadness = ''
+    Surprise = ''
 
     def __init__(self):
         self.name = 'rob'

@@ -2,6 +2,7 @@ import imp, json,cv2,os
 import sys, threading, time
 from multiprocessing import Queue
 from avatar.AvatarBuilder import AvatarBuilder
+from captureStats.DisplayInfo import DisplayInfo
 
 weightsPath =  "/home/pixiepro/Demos/FTF/faceDetector/weights.txt"
 capturePath = "/home/pixiepro/Demos/FTF/faceDetector/img.jpg"
@@ -44,6 +45,23 @@ def showAvatar(dic, msg):
     print(avatarBuilder.avatar.ImagePath)
 
     displayImage(avatarBuilder.avatar.ImagePath, msg)
+
+    displayInfo = DisplayInfo()
+    displayInfo.writeLine("Gender: " + str(avatarBuilder.avatar.Gender))
+    displayInfo.writeLine("Age: " + str(avatarBuilder.avatar.Age))
+    displayInfo.writeLine("Glasses: " + str(avatarBuilder.avatar.Glasses))
+    displayInfo.writeLine("Facial Hair: " + str(avatarBuilder.avatar.FacialHairValue))
+    displayInfo.writeLine("Hair Color: " + str(avatarBuilder.avatar.HairColorValue))
+    displayInfo.writeLine("Baldness: " + str(avatarBuilder.avatar.Bald*100) + "%")
+    displayInfo.writeLine("Anger: " + str(avatarBuilder.avatar.Anger*100) + "%")
+    displayInfo.writeLine("Contempt: " + str(avatarBuilder.avatar.Contempt*100) + "%")
+    displayInfo.writeLine("Disgust: " + str(avatarBuilder.avatar.Disgust*100) + "%")
+    displayInfo.writeLine("Fear: " + str(avatarBuilder.avatar.Fear*100) + "%")
+    displayInfo.writeLine("Happiness: " + str(avatarBuilder.avatar.Happiness*100) + "%")
+    displayInfo.writeLine("Neutral: " + str(avatarBuilder.avatar.Neutral*100) + "%")
+    displayInfo.writeLine("Sadness: " + str(avatarBuilder.avatar.Sadness*100) + "%")
+    displayInfo.writeLine("Surprise: " + str(avatarBuilder.avatar.Surprise*100) + "%")
+    displayInfo.showInfo()
     
 def displayImage(imagePath, msg):
     avatar = cv2.imread(imagePath,cv2.IMREAD_COLOR)
@@ -51,7 +69,7 @@ def displayImage(imagePath, msg):
     cv2.namedWindow('Avatar', cv2.WINDOW_NORMAL)
     cv2.resizeWindow('Avatar', 640, 480)
     cv2.moveWindow('Avatar', 640, 0)
-    cv2.putText(avatar,msg,(10,280), cv2.FONT_HERSHEY_SIMPLEX, 4,(255,255,255),2,cv2.LINE_AA)
+    cv2.putText(avatar,msg,(10,280), cv2.FONT_HERSHEY_SCRIPT_SIMPLEX, 4,(255,255,255),2,cv2.LINE_AA)
     cv2.imshow('Avatar', avatar)
     
 if __name__== "__main__":

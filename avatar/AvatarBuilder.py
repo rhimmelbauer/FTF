@@ -13,6 +13,14 @@ class AvatarBuilder(object):
     COLOR_KEY = 'color'
     BALD_KEY = 'bald'
     FACIAL_HAIR_KEY = 'facialHair'
+    ANGER_KEY = 'anger'
+    CONTEMPT_KEY = 'contempt'
+    DISGUST_KEY = 'disgust'
+    FEAR_KEY = 'fear'
+    HAPPINESS_KEY = 'happiness'
+    NEUTRAL_KEY = 'neutral'
+    SADNESS_KEY = 'sadness'
+    SURPRISE_KEY = 'surprise'
     
     MALE_VALIDATION = 'male'
     BLOND_VALIDATION = 'blond'
@@ -52,9 +60,25 @@ class AvatarBuilder(object):
             elif str(k) == self.HAIR_COLOR_KEY:
                 self.avatar.setHairColor(v)
             elif str(k) == self.AGE_KEY:
-                self.avatar.setHairColor(v)
+                self.avatar.setAge(v)
             elif str(k) == self.FACIAL_HAIR_KEY:
                 self.avatar.setFacialHair(v)
+            elif str(k) == self.ANGER_KEY:
+                self.avatar.Anger = v
+            elif str(k) == self.CONTEMPT_KEY:
+                self.avatar.Contempt = v
+            elif str(k) == self.DISGUST_KEY:
+                self.avatar.Disgust = v
+            elif str(k) == self.FEAR_KEY:
+                self.avatar.Fear = v
+            elif str(k) == self.HAPPINESS_KEY:
+                self.avatar.Happiness = v
+            elif str(k) == self.NEUTRAL_KEY:
+                self.avatar.Neutral = v
+            elif str(k) == self.SADNESS_KEY:
+                self.avatar.Sadness = v
+            elif str(k) == self.SURPRISE_KEY:
+                self.avatar.Surprise = v
             
             if isinstance(v,dict):
                 self.cycleDictionary(v)
@@ -79,6 +103,7 @@ class AvatarBuilder(object):
 
     def defineHairColor(self):
         if self.avatar.Bald > 0.8:
+            self.avatar.HairColorValue = "No Hair"
             return self.BALD
         hairColorDictionary = {}
         print(str(len(self.avatar.HairColor)))
@@ -94,18 +119,24 @@ class AvatarBuilder(object):
         print(str(hairColorDictionary))
         highest = max(hairColorDictionary, key=lambda key: hairColorDictionary[key])
         print(str(highest))
+        self.avatar.HairColorValue = highest
         return highest
 
     def defineFacialHair(self):
         print(str(self.avatar.FacialHair))
         if (self.avatar.FacialHair['moustache'] < 0.35) & (self.avatar.FacialHair['beard'] < 0.35):
+            self.avatar.FacialHairValue = "None"
             return ''
         elif (self.avatar.FacialHair['moustache'] > 0.5) & (self.avatar.FacialHair['beard'] < 0.45):
+            self.avatar.FacialHairValue = self.MOUSTACHE
             return self.MOUSTACHE
         elif (self.avatar.FacialHair['moustache'] > 0.4) & (self.avatar.FacialHair['beard'] > 0.4):
+            self.avatar.FacialHairValue = self.BEARD
             return self.BEARD
         else:
+            self.avatar.FacialHairValue = "None"
             return ''
+        
     def setImageToAvatar(self):
         print(self.defineHairColor())
         print(self.defineGender())
