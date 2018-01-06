@@ -3,6 +3,7 @@ import sys, threading, time
 from multiprocessing import Queue
 from avatar.AvatarBuilder import AvatarBuilder
 from captureStats.DisplayInfo import DisplayInfo
+from captureStats.faceCSVInfoWriter import FaceCSVInfoWriter
 import time
 
 weightsPath =  "faceDetector/weights.txt"
@@ -12,7 +13,7 @@ azureKeys = "keys/azureKeys.txt"
 fd = imp.load_source('FaceDetector','faceDetector/FaceDetector.py')
 am = imp.load_source('AzureCognitiveManager','azureCogServManager/AzureCognitiveManager.py')
 
-lockAzureThread = False
+lockAzureThread = True
 
 class Face():
     def _init__():
@@ -39,7 +40,7 @@ def pretty(d,indent=0):
         else:
             print ('\t' * (indent+1) + str(v))
 
-def showAvatar(dic, msg):
+def showAvatar(dic, msg, faceId):
 
     avatarBuilder = AvatarBuilder()
 
@@ -48,21 +49,29 @@ def showAvatar(dic, msg):
 
     displayImage(avatarBuilder.avatar.ImagePath, msg)
 
+    displayInfo(avatarBuilder.avatar)
+
+    file = FaceCSVInfoWriter()
+    file.getAvatarData(avatarBuilder.avatar)
+    file.writeData()
+
+
+def displayInfo(avatar):
     displayInfo = DisplayInfo()
-    displayInfo.writeLine("Gender: " + str(avatarBuilder.avatar.Gender))
-    displayInfo.writeLine("Age: " + str(avatarBuilder.avatar.Age))
-    displayInfo.writeLine("Glasses: " + str(avatarBuilder.avatar.Glasses))
-    displayInfo.writeLine("Facial Hair: " + str(avatarBuilder.avatar.FacialHairValue))
-    displayInfo.writeLine("Hair Color: " + str(avatarBuilder.avatar.HairColorValue))
-    displayInfo.writeLine("Baldness: " + str(avatarBuilder.avatar.Bald*100) + "%")
-    displayInfo.writeLine("Anger: " + str(avatarBuilder.avatar.Anger*100) + "%")
-    displayInfo.writeLine("Contempt: " + str(avatarBuilder.avatar.Contempt*100) + "%")
-    displayInfo.writeLine("Disgust: " + str(avatarBuilder.avatar.Disgust*100) + "%")
-    displayInfo.writeLine("Fear: " + str(avatarBuilder.avatar.Fear*100) + "%")
-    displayInfo.writeLine("Happiness: " + str(avatarBuilder.avatar.Happiness*100) + "%")
-    displayInfo.writeLine("Neutral: " + str(avatarBuilder.avatar.Neutral*100) + "%")
-    displayInfo.writeLine("Sadness: " + str(avatarBuilder.avatar.Sadness*100) + "%")
-    displayInfo.writeLine("Surprise: " + str(avatarBuilder.avatar.Surprise*100) + "%")
+    displayInfo.writeLine("Gender: " + str(avatar.Gender))
+    displayInfo.writeLine("Age: " + str(avatar.Age))
+    displayInfo.writeLine("Glasses: " + str(avatar.Glasses))
+    displayInfo.writeLine("Facial Hair: " + str(avatar.FacialHairValue))
+    displayInfo.writeLine("Hair Color: " + str(avatar.HairColorValue))
+    displayInfo.writeLine("Baldness: " + str(avatar.Bald*100) + "%")
+    displayInfo.writeLine("Anger: " + str(avatar.Anger*100) + "%")
+    displayInfo.writeLine("Contempt: " + str(avatar.Contempt*100) + "%")
+    displayInfo.writeLine("Disgust: " + str(avatar.Disgust*100) + "%")
+    displayInfo.writeLine("Fear: " + str(avatar.Fear*100) + "%")
+    displayInfo.writeLine("Happiness: " + str(avatar.Happiness*100) + "%")
+    displayInfo.writeLine("Neutral: " + str(avatar.Neutral*100) + "%")
+    displayInfo.writeLine("Sadness: " + str(avatar.Sadness*100) + "%")
+    displayInfo.writeLine("Surprise: " + str(avatar.Surprise*100) + "%")
     displayInfo.showInfo()
     
 def displayImage(imagePath, msg):
@@ -88,9 +97,9 @@ def azureThread(facetemp):
                             
         if similar:
             facetemp._faceId= similar['faceId']
-            showAvatar(facetemp._faceAttr, "Hello Again!")
+            showAvatar(facetemp._faceAttr, "Hello Again!", facetemp._faceId)
         else:
-            showAvatar(facetemp._faceAttr, "Hi, new person!")
+            showAvatar(facetemp._faceAttr, "Hi, new person!", facetemp_faceId)
     time.sleep(3)
     print("//////////////////////Exit Thread///////////////////////")
     
