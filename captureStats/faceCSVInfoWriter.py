@@ -1,5 +1,6 @@
 import csv
 import os
+import datetime
 
 class FaceCSVInfoWriter(object):
     HEADER = ("GENDER",
@@ -16,8 +17,7 @@ class FaceCSVInfoWriter(object):
               "NEUTRAL",
               "SADNESS",
               "SURPRISE",
-              "DATE",
-              "HOUR_DAY")
+              "DATE_TIME")
 
     FilePath = 'captureStats/dbFaces.csv'
     
@@ -46,8 +46,7 @@ class FaceCSVInfoWriter(object):
                 avatar.Neutral,
                 avatar.Sadness,
                 avatar.Surprise,
-                avatar.Age,
-                avatar.Age)
+                str(datetime.datetime.now()))
         
     def writeData(self):
         print("/////////////writing data///////////////")

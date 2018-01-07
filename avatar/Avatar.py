@@ -1,5 +1,6 @@
 class Avatar(object):
     Emotion = ''
+    EmotionConfidence = ''
     Gender = ''
     Age = ''
     Glasses = ''

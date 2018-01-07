@@ -42,6 +42,8 @@ def pretty(d,indent=0):
 
 def showAvatar(dic, msg, faceId):
 
+    pretty(dic)
+
     avatarBuilder = AvatarBuilder()
 
     avatarBuilder.cycleDictionary(dic)
@@ -99,7 +101,7 @@ def azureThread(facetemp):
             facetemp._faceId= similar['faceId']
             showAvatar(facetemp._faceAttr, "Hello Again!", facetemp._faceId)
         else:
-            showAvatar(facetemp._faceAttr, "Hi, new person!", facetemp_faceId)
+            showAvatar(facetemp._faceAttr, "Hi, new person!", facetemp._faceId)
     time.sleep(3)
     print("//////////////////////Exit Thread///////////////////////")
     
@@ -126,7 +128,7 @@ if __name__== "__main__":
                     detectFaceTimes = 0
                     print("//////////////////////Exit if///////////////////////")
                 else:
-                    if detectFaceTimes == 1:
+                    if detectFaceTimes == 3:
                         lockAzureThread = False
                     print("//////////////////////Enter ELSE///////////////////////")
                     detectFaceTimes = detectFaceTimes + 1

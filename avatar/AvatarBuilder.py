@@ -21,6 +21,7 @@ class AvatarBuilder(object):
     NEUTRAL_KEY = 'neutral'
     SADNESS_KEY = 'sadness'
     SURPRISE_KEY = 'surprise'
+    EMOTION_KEY = 'emotion'
     
     MALE_VALIDATION = 'male'
     BLOND_VALIDATION = 'blond'
@@ -40,6 +41,8 @@ class AvatarBuilder(object):
     RED = 'Red'
     BEARD = 'Beard'
     MOUSTACHE = 'Moustache'
+    ANGRY = 'Angry'
+    SURPRISE = 'Surprise'
 
     HAPPY = 'Happy'
     NEUTRAL = 'Neutral'
@@ -49,8 +52,9 @@ class AvatarBuilder(object):
 
     def cycleDictionary(self,d,indent=0):
         for k,v in d.items():
-            if str(k) == self.SMILE_KEY:
+            if str(k) == self.EMOTION_KEY:
                 self.avatar.setEmotion(v)
+                print(self.avatar.Emotion)
             elif str(k) == self.GENDER_KEY:
                 self.avatar.setGender(v)
             elif str(k) == self.GLASSES_KEY:
@@ -96,7 +100,11 @@ class AvatarBuilder(object):
             return self.GLASSES
 
     def defineEmotion(self):
-        if(self.avatar.Emotion > 0.52):
+        if self.avatar.Anger > 0.1:
+            return self.ANGRY
+        elif self.avatar.Surprise > 0.1:
+            return self.SURPRISE
+        elif self.avatar.Happiness > 0.6:
             return self.HAPPY
         else:
             return self.NEUTRAL
@@ -115,7 +123,7 @@ class AvatarBuilder(object):
                 hairColorDictionary[self.DARK] = item['confidence']
             elif str(item['color']) == self.RED_VALIDATION:
                 hairColorDictionary[self.RED] = item['confidence']
-        
+                
         highest = max(hairColorDictionary, key=lambda key: hairColorDictionary[key])
         
         self.avatar.HairColorValue = highest
