@@ -41,7 +41,7 @@ def pretty(d,indent=0):
             print ('\t' * (indent+1) + str(v))
 
 def showAvatar(dic, msg, faceId):
-
+    print(dic)
     avatarBuilder = AvatarBuilder()
     avatarBuilder.cycleDictionary(dic)
     avatarBuilder.setImageToAvatar()
@@ -97,6 +97,9 @@ def displayImage(imagePath, msg):
 def azureThread(facetemp):
     print("//////////////////////Enter Thread///////////////////////")
     facetemp._faceAttr, tempFaceId = azureCognitive.getFaceAttr(capturePath)
+    print("face att:")
+    print(facetemp._faceAttr)
+    print(tempFaceId)
     if face._faceAttr != None: 
         similar = azureCognitive.findSimilar(tempFaceId)
                     
@@ -124,8 +127,7 @@ if __name__== "__main__":
         while not faceDetector._faceDetected: pass
         faceDetector.stop()
 		
-        try:
-            
+        try:            
             if os.path.isfile(capturePath):
                 print(str(lockAzureThread))
                 if not lockAzureThread:
@@ -136,7 +138,7 @@ if __name__== "__main__":
                     detectFaceTimes = 0
                     print("//////////////////////Exit if///////////////////////")
                 else:
-                    if detectFaceTimes == 3:
+                    if detectFaceTimes == 9:
                         lockAzureThread = False
                     print("//////////////////////Enter ELSE///////////////////////")
                     detectFaceTimes = detectFaceTimes + 1
