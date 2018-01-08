@@ -19,6 +19,7 @@ class Avatar(object):
     Neutral = ''
     Sadness = ''
     Surprise = ''
+    AdPath = ''
 
     def __init__(self):
         self.name = 'rob'
@@ -39,3 +40,5 @@ class Avatar(object):
         self.FacialHair = facialHair
     def setImagePath(self, imagePath):
         self.ImagePath = imagePath
+    def setAdPath(self, adPath):
+        self.AdPath = adPath

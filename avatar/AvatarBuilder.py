@@ -23,6 +23,7 @@ class AvatarBuilder(object):
     SURPRISE_KEY = 'surprise'
     EMOTION_KEY = 'emotion'
     
+    FEMALE_VALIDATION = 'female'
     MALE_VALIDATION = 'male'
     BLOND_VALIDATION = 'blond'
     BRUNETTE_VALIDATION = 'brown'
@@ -143,6 +144,23 @@ class AvatarBuilder(object):
             self.avatar.FacialHairValue = "None"
             return ''
         
+    def defineAdPath(self):
+        if (self.avatar.Gender == self.FEMALE_VALIDATION) & (self.avatar.Glasses == self.NO_GLASSES):
+            self.avatar.setAdPath('imgAds/revlonAd.jpg')
+        else:
+            self.avatar.setAdPath('imgAds/glassesAd.jpg')
+        if (self.avatar.Gender == self.MALE_VALIDATION) & (self.avatar.Glasses == self.NO_GLASSES) & (self.avatar.FacialHairValue == "None"):
+            self.avatar.setAdPath('imgAds/nikeAd.jpg')
+        elif (self.avatar.Gender == self.MALE_VALIDATION) & (self.avatar.Glasses != self.NO_GLASSES) & (self.avatar.FacialHairValue == "None"):
+            self.avatar.setAdPath('imgAds/MaleGlassesAd.jpg')
+        elif (self.avatar.Gender == self.MALE_VALIDATION) & (self.avatar.Glasses != self.NO_GLASSES) & (self.avatar.FacialHairValue == self.BEARD):
+            self.avatar.setAdPath('imgAds/MaleGlassesBeardAd.jpg')
+        elif (self.avatar.Gender == self.MALE_VALIDATION) & (self.avatar.Glasses == self.NO_GLASSES) & (self.avatar.FacialHairValue == self.BEARD):
+            self.avatar.setAdPath('imgAds/beardAd.jpg')
+            
+            
+            
+        
     def setImageToAvatar(self):
         self.avatar.setImagePath(self.IMAGE_BASE
                                  + self.defineGender()
@@ -151,6 +169,7 @@ class AvatarBuilder(object):
                                  + self.defineGlasses()
                                  + self.defineFacialHair()
                                  + '.png')
+        self.defineAdPath()
         
             
 

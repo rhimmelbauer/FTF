@@ -42,16 +42,15 @@ def pretty(d,indent=0):
 
 def showAvatar(dic, msg, faceId):
 
-    pretty(dic)
-
     avatarBuilder = AvatarBuilder()
-
     avatarBuilder.cycleDictionary(dic)
     avatarBuilder.setImageToAvatar()
 
     displayImage(avatarBuilder.avatar.ImagePath, msg)
 
     displayInfo(avatarBuilder.avatar)
+
+    displayAd(avatarBuilder.avatar)
 
     file = FaceCSVInfoWriter()
     file.getAvatarData(avatarBuilder.avatar)
@@ -75,6 +74,15 @@ def displayInfo(avatar):
     displayInfo.writeLine("Sadness: " + str(avatar.Sadness*100) + "%")
     displayInfo.writeLine("Surprise: " + str(avatar.Surprise*100) + "%")
     displayInfo.showInfo()
+
+def displayAd(avatar):
+    smartAd = cv2.imread(avatar.AdPath,cv2.IMREAD_COLOR)
+
+    cv2.namedWindow('Smart Advertisement', cv2.WINDOW_NORMAL)
+    cv2.resizeWindow('Smart Advertisement', 640, 550)
+    cv2.moveWindow('Smart Advertisement', 640, 480)
+    cv2.imshow('Smart Advertisement', smartAd)
+    
     
 def displayImage(imagePath, msg):
     avatar = cv2.imread(imagePath,cv2.IMREAD_COLOR)

@@ -26,7 +26,6 @@ class FaceCSVInfoWriter(object):
             self.createFile()
             
     def createFile(self):
-        print("///////////////// Creating file /////////////////")
         with open(self.FilePath, 'w') as f:
             writer = csv.writer(f)
             writer.writerow(self.HEADER)
@@ -49,8 +48,6 @@ class FaceCSVInfoWriter(object):
                 str(datetime.datetime.now()))
         
     def writeData(self):
-        print("/////////////writing data///////////////")
-        print(self.data)
         with open(self.FilePath, 'a') as f:
             writer = csv.writer(f)
             writer.writerow(self.data)
