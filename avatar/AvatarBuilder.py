@@ -114,6 +114,7 @@ class AvatarBuilder(object):
 
     def defineHairColor(self):
         print('///////////////////// Bald: ' + str(self.avatar.Bald) + '//////////')
+        print('///////////////////// Bald: ' + str(self.avatar.HairColor) + '//////////')
         if self.avatar.Bald > 0.8:
             self.avatar.HairColorValue = "No Hair"
             return self.BALD

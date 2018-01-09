@@ -15,7 +15,7 @@ am = imp.load_source('AzureCognitiveManager','azureCogServManager/AzureCognitive
 
 lockAzureThread = True
 
-TIME_FOR_AZURE = 50
+TIME_FOR_AZURE = 25
 
 class Face():
     def _init__():
