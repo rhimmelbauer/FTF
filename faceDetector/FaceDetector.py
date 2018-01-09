@@ -1,6 +1,7 @@
 import cv2
 import sys, os
 import json
+import time
 
 class FaceDetector:
 
@@ -15,6 +16,7 @@ class FaceDetector:
                 self._cam = None
                 self._continue = False
                 self.initCam = False
+                self._writeImage = False
 
         def __del__(self):
                 if self._cam:
@@ -59,15 +61,19 @@ class FaceDetector:
                 
         def stop(self):
                 self._continue = False
-        
-        def detectFace(self):
                 
+        def writeImage(self):
+                self._writeImage = True
+                
+        def detectFace(self):
                 if self.initCam == False:
                         self.initCam = False
                         self._cam = cv2.VideoCapture(0)
                 self._continue = True                
                 while self._continue is True:
                         ret, frame = self._cam.read()
+                        if frame is None:
+                                break
                         img = frame.copy()
                         gray=cv2.cvtColor(frame,cv2.COLOR_BGR2GRAY)
                         faces = self._getFacesInFrame(gray)
@@ -75,6 +81,9 @@ class FaceDetector:
                                 if self._capture is None:
                                         self._capture = img
                                         cv2.imwrite(self._pathToImage,self._capture)
+                                        if self._writeImage:
+                                                cv2.imwrite("faceDetector/imgAzure.jpg",self._capture)
+                                                self._writeImage = False
                                 self._faceDetected = True #This has to be done AFTER file has been written
                                 cv2.rectangle(frame,(x,y),(x+w,y+h),(0,255,0),2)
                                 roi_gray=gray[y:y+h, x:x+w]
@@ -83,7 +92,7 @@ class FaceDetector:
                                 for (ex,ey,ew,eh) in smiles:
                                         cv2.rectangle(roi_color,(ex,ey),(ex+ew,ey+eh),(255,0,0),2)
                                         self._smileDetected = True
-                                        self._capture = img                                                
+                                        self._capture = img
                         cv2.imshow('Video',frame)
                         cv2.moveWindow('Video',0,0)
                         if cv2.waitKey(1) & 0xff == ord('q'):
@@ -91,3 +100,6 @@ class FaceDetector:
                 self._cam.release()
                 if self._faceDetected:
                         cv2.imwrite(self._pathToImage,self._capture)
+                        if self._writeImage:
+                                cv2.imwrite("faceDetector/imgAzure.jpg",self._capture)
+                                self._writeImage = False

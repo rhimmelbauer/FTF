@@ -48,8 +48,10 @@ class AvatarBuilder(object):
     HAPPY = 'Happy'
     NEUTRAL = 'Neutral'
     
-    def __init__(self):
+    def __init__(self, faceID, msg):
         self.avatar = Avatar()
+        self.avatar.FaceID = faceID
+        self.avatar.Msg = msg
 
     def cycleDictionary(self,d,indent=0):
         for k,v in d.items():
@@ -111,6 +113,7 @@ class AvatarBuilder(object):
             return self.NEUTRAL
 
     def defineHairColor(self):
+        print('///////////////////// Bald: ' + str(self.avatar.Bald) + '//////////')
         if self.avatar.Bald > 0.8:
             self.avatar.HairColorValue = "No Hair"
             return self.BALD
@@ -145,10 +148,13 @@ class AvatarBuilder(object):
             return ''
         
     def defineAdPath(self):
-        if (self.avatar.Gender == self.FEMALE_VALIDATION) & (self.avatar.Glasses == self.NO_GLASSES):
-            self.avatar.setAdPath('imgAds/revlonAd.jpg')
-        else:
-            self.avatar.setAdPath('imgAds/glassesAd.jpg')
+        if (self.avatar.Gender == self.FEMALE_VALIDATION):
+            if self.avatar.Glasses == self.NO_GLASSES:
+                self.avatar.setAdPath('imgAds/revlonAd.jpg')
+                return
+            else:
+                self.avatar.setAdPath('imgAds/glassesAd.jpg')
+                return
         if (self.avatar.Gender == self.MALE_VALIDATION) & (self.avatar.Glasses == self.NO_GLASSES) & (self.avatar.FacialHairValue == "None"):
             self.avatar.setAdPath('imgAds/nikeAd.jpg')
         elif (self.avatar.Gender == self.MALE_VALIDATION) & (self.avatar.Glasses != self.NO_GLASSES) & (self.avatar.FacialHairValue == "None"):
@@ -157,6 +163,8 @@ class AvatarBuilder(object):
             self.avatar.setAdPath('imgAds/MaleGlassesBeardAd.jpg')
         elif (self.avatar.Gender == self.MALE_VALIDATION) & (self.avatar.Glasses == self.NO_GLASSES) & (self.avatar.FacialHairValue == self.BEARD):
             self.avatar.setAdPath('imgAds/beardAd.jpg')
+        else:
+            self.avatar.setAdPath('imgAds/nikeAd.jpg')
             
             
             

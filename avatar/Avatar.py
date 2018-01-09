@@ -20,6 +20,8 @@ class Avatar(object):
     Sadness = ''
     Surprise = ''
     AdPath = ''
+    FaceID = ''
+    Msg = ''
 
     def __init__(self):
         self.name = 'rob'
